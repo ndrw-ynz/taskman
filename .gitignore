@@ -1,0 +1,81 @@
+# Backend (Spring Boot / Maven)
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+
+# Frontend (Next.js / Node)
+## Dependencies
+frontend/node_modules/
+frontend/.pnp/
+frontend/.pnp.*
+frontend/.yarn/*
+!frontend/.yarn/patches
+!frontend/.yarn/plugins
+!frontend/.yarn/releases
+!frontend/.yarn/versions
+
+## Build outputs
+frontend/.next/
+frontend/out/
+frontend/build
+
+## Testing
+frontend/coverage/
+
+## Debug logs
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/.pnpm-debug.log*
+
+## Misc
+frontend/.DS_Store
+frontend/*.pem
+
+## Env files
+frontend/.env*
+
+## Vercel
+frontend/.vercel
+
+## TypeScript
+frontend/*.tsbuildinfo
+frontend/next-env.d.ts
+
+
+# Common
+.DS_Store
+*.log
+*.pem
+.env*
