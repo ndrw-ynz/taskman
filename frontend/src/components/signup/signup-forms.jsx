@@ -3,6 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import PersonalFields from "./personal-fields";
 import PasswordField from "./password-field";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "../ui/card";
 
 export default function SignupForms({
   progress,
@@ -36,10 +43,24 @@ export default function SignupForms({
       {step === 1 && <PasswordField form={form} />}
       {/* Step 2 - Basic Personal Information*/}
       {step === 2 && <PersonalFields form={form} />}
-      {/* Step 3 - Acknowledgements */}
+      {/* Step 3 - Acknowledgement */}
       {step === 3 && (
         <div>
-          <p>good job cuhh</p>
+          <Card className="mx-auto w-full max-w-md text-center shadow-lg">
+            <CardHeader>
+              <CardTitle>
+                <p className="text-xl font-bold">You're all set!</p>
+              </CardTitle>
+              <CardDescription>
+                <p className="mb-2 text-gray-200">
+                  You're moments away from joining our community.
+                </p>
+                <p className="text-gray-200">
+                  Click <strong>"Create Account"</strong> to get started!
+                </p>
+              </CardDescription>
+            </CardHeader>
+          </Card>
         </div>
       )}
     </div>
