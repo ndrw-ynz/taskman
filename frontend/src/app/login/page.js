@@ -22,7 +22,7 @@ const loginSchema = z.object({
   password: z.string(),
 });
 
-export default function Login() {
+export default function LoginPage() {
   const form = useForm({
     resolver: zodResolver(loginSchema),
     mode: "onSubmit",
@@ -93,7 +93,7 @@ export default function Login() {
                 <div className="flex w-[100%] justify-center">
                   <p>
                     Don't have an account?{" "}
-                    <Link href="/" className="underline">
+                    <Link href="/signup" className="underline">
                       Sign up for Taskman
                     </Link>
                   </p>

@@ -43,7 +43,7 @@ const signupSchema = z.object({
   ),
 });
 
-export default function Home() {
+export default function SignupPage() {
   const [step, setStep] = useState(0);
   const [progress, setProgress] = useState(0);
 
