@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { TfiTrello } from "react-icons/tfi";
 import Wave from "react-wavify";
 
@@ -13,12 +14,17 @@ export default function LandingPage() {
           <p className="text-2xl font-semibold">Taskman</p>
         </div>
         <div className="flex flex-row items-center gap-x-4">
-          <Button variant="rounded" className="px-5">
-            Login
-          </Button>
-          <Button variant="rounded" className="px-5">
-            Signup
-          </Button>
+          <Link href="/login">
+            <Button variant="rounded" className="px-5">
+              Login
+            </Button>
+          </Link>
+
+          <Link href="/signup">
+            <Button variant="rounded" className="px-5">
+              Signup
+            </Button>
+          </Link>
         </div>
       </div>
 
@@ -32,18 +38,23 @@ export default function LandingPage() {
             <p>Stay on track with Taskman.</p>
           </div>
           <div className="flex flex-row gap-x-4">
-            <Button
-              variant="rounded"
-              className="px-4 text-xs lg:px-6 lg:text-base xl:px-10 xl:py-5"
-            >
-              Login
-            </Button>
-            <Button
-              variant="rounded"
-              className="px-4 text-xs lg:px-6 lg:text-base xl:px-10 xl:py-5"
-            >
-              Signup
-            </Button>
+            <Link href="/login">
+              <Button
+                variant="rounded"
+                className="px-4 text-xs lg:px-6 lg:text-base xl:px-10 xl:py-5"
+              >
+                Login
+              </Button>
+            </Link>
+
+            <Link href="signup">
+              <Button
+                variant="rounded"
+                className="px-4 text-xs lg:px-6 lg:text-base xl:px-10 xl:py-5"
+              >
+                Signup
+              </Button>
+            </Link>
           </div>
         </div>
         {/* Right Side */}
