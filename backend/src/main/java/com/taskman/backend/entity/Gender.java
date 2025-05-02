@@ -1,5 +1,9 @@
 package com.taskman.backend.entity;
 
+/**
+ *  Enum representing the available gender
+ *  categories for a user.
+ */
 public enum Gender {
     MAN,
     WOMAN,
