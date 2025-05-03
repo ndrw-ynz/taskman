@@ -34,6 +34,20 @@ public class User {
         this.gender = gender;
     }
 
+    public User(String username, String hashPassword, String name, LocalDate dateOfBirth, Gender gender) {
+        this.username = username;
+        this.hashPassword = hashPassword;
+        this.name = name;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+    }
+
+    public User(String username, String name, Gender gender) {
+        this.username = username;
+        this.name = name;
+        this.gender = gender;
+    }
+
     public Long getId() {
         return id;
     }
