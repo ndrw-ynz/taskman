@@ -1,5 +1,6 @@
 package com.taskman.backend.service;
 
+import com.taskman.backend.dto.UserCreationDTO;
 import com.taskman.backend.dto.UserResponseDTO;
 import com.taskman.backend.entity.User;
 import com.taskman.backend.mapper.UserMapper;
@@ -7,6 +8,7 @@ import com.taskman.backend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,11 +22,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -53,11 +57,14 @@ public class UserService {
      * Creates a new user record with the provided
      * user details.
      *
-     * @param newUser The details of the new user account.
+     * @param userCreationDTO The details of the new user account.
      * @return The UserResponseDTO of the new user account.
      */
     @Transactional
-    public UserResponseDTO createUser(User newUser) {
+    public UserResponseDTO createUser(UserCreationDTO userCreationDTO) {
+        User newUser = userMapper.toEntity(userCreationDTO);
+        newUser.setHashPassword(passwordEncoder.encode(userCreationDTO.password()));
+
         User savedUser = userRepository.save(newUser);
         return userMapper.toResponse(savedUser);
     }
