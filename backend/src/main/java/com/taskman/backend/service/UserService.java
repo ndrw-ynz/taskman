@@ -2,6 +2,7 @@ package com.taskman.backend.service;
 
 import com.taskman.backend.dto.UserCreationDTO;
 import com.taskman.backend.dto.UserResponseDTO;
+import com.taskman.backend.dto.UserUpdateDTO;
 import com.taskman.backend.entity.User;
 import com.taskman.backend.mapper.UserMapper;
 import com.taskman.backend.repository.UserRepository;
@@ -73,11 +74,12 @@ public class UserService {
      * Partially updates a user's data.
      *
      * @param id The id of the user.
-     * @param user The updated details of the user.
+     * @param userUpdateDTO The updated details of the user.
      * @return The UserResponseDTO of the updated user account.
      */
     @Transactional
-    public UserResponseDTO updateUser(Long id, User user) {
+    public UserResponseDTO updateUser(Long id, UserUpdateDTO userUpdateDTO) {
+        User user = userMapper.toEntity(userUpdateDTO);
         User updatedUser = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("No user with id " + id));
         updatedUser.setUsername(user.getUsername());
         updatedUser.setName(user.getName());

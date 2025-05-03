@@ -3,7 +3,6 @@ package com.taskman.backend.controller;
 import com.taskman.backend.dto.UserCreationDTO;
 import com.taskman.backend.dto.UserResponseDTO;
 import com.taskman.backend.dto.UserUpdateDTO;
-import com.taskman.backend.mapper.UserMapper;
 import com.taskman.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,12 +20,10 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final UserMapper userMapper;
 
     @Autowired
-    public UserController(UserService userService, UserMapper userMapper) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.userMapper = userMapper;
     }
 
     /**
@@ -67,7 +64,7 @@ public class UserController {
      */
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @RequestBody UserUpdateDTO userUpdateDTO) {
-        UserResponseDTO updatedUser = userService.updateUser(id, userMapper.toEntity(userUpdateDTO));
+        UserResponseDTO updatedUser = userService.updateUser(id, userUpdateDTO);
         return ResponseEntity.ok(updatedUser);
     }
 
