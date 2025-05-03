@@ -1,8 +1,8 @@
 package com.taskman.backend.controller;
 
 import com.taskman.backend.dto.UserCreationDTO;
+import com.taskman.backend.dto.UserResponseDTO;
 import com.taskman.backend.dto.UserUpdateDTO;
-import com.taskman.backend.entity.User;
 import com.taskman.backend.mapper.UserMapper;
 import com.taskman.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class UserController {
      * @return The user if found, or 404 if not.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
+    public ResponseEntity<UserResponseDTO> getUser(@PathVariable Long id) {
         return ResponseEntity.ok(this.userService.getUser(id));
     }
 
@@ -44,7 +44,7 @@ public class UserController {
      * @return The list of all users.
      */
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         return ResponseEntity.ok(this.userService.getAllUsers());
     }
 
@@ -54,8 +54,8 @@ public class UserController {
      * @return The newly created user record.
      */
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody UserCreationDTO userCreationDTO) {
-        User createdUser = userService.createUser(userMapper.toEntity(userCreationDTO));
+    public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserCreationDTO userCreationDTO) {
+        UserResponseDTO createdUser = userService.createUser(userMapper.toEntity(userCreationDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
@@ -66,8 +66,8 @@ public class UserController {
      * @return The updated user record.
      */
     @PatchMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserUpdateDTO userUpdateDTO) {
-        User updatedUser = userService.updateUser(id, userMapper.toEntity(userUpdateDTO));
+    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @RequestBody UserUpdateDTO userUpdateDTO) {
+        UserResponseDTO updatedUser = userService.updateUser(id, userMapper.toEntity(userUpdateDTO));
         return ResponseEntity.ok(updatedUser);
     }
 
