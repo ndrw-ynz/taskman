@@ -85,7 +85,23 @@ export default function HomeLayout({ children }) {
               <NavigationMenuItem>
                 <NavigationMenuTrigger>Starred</NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul></ul>
+                  <p className="pt-2 pl-2 text-xs font-semibold">
+                    Your Starred Boards
+                  </p>
+                  <ul className="flex w-[200px] flex-col items-start gap-3 p-2">
+                    <BoardListItem
+                      key="Board A"
+                      boardName="Board A"
+                      workspaceName="A Workspace"
+                      href="#"
+                    />
+                    <BoardListItem
+                      key="Board B"
+                      boardName="Board B"
+                      workspaceName="A Workspace"
+                      href="#"
+                    />
+                  </ul>
                 </NavigationMenuContent>
               </NavigationMenuItem>
             </NavigationMenuList>
