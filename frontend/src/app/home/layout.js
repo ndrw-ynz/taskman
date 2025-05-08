@@ -56,7 +56,29 @@ export default function HomeLayout({ children }) {
               <NavigationMenuItem>
                 <NavigationMenuTrigger>Recent</NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul></ul>
+                  <p className="pt-2 pl-2 text-xs font-semibold">
+                    Your Recent Board
+                  </p>
+                  <ul className="flex w-[200px] flex-col items-start gap-3 p-2">
+                    <BoardListItem
+                      key="Board A"
+                      boardName="Board A"
+                      workspaceName="A Workspace"
+                      href="#"
+                    />
+                    <BoardListItem
+                      key="Board B"
+                      boardName="Board B"
+                      workspaceName="A Workspace"
+                      href="#"
+                    />
+                    <BoardListItem
+                      key="Board C"
+                      boardName="Board C"
+                      workspaceName="B Workspace"
+                      href="#"
+                    />
+                  </ul>
                 </NavigationMenuContent>
               </NavigationMenuItem>
               {/* Starred */}
@@ -103,6 +125,41 @@ const WorkspaceListItem = React.forwardRef(
                 <div className="text-sm leading-none font-medium">{title}</div>
                 <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
                   {children}
+                </p>
+              </div>
+            </div>
+          </a>
+        </NavigationMenuLink>
+      </li>
+    );
+  },
+);
+
+const BoardListItem = React.forwardRef(
+  ({ className, boardName, workspaceName, ...props }, ref) => {
+    return (
+      <li>
+        <NavigationMenuLink asChild>
+          <a
+            ref={ref}
+            className={cn(
+              "hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block space-y-1 rounded-md p-1 leading-none no-underline transition-colors outline-none select-none",
+              className,
+            )}
+            {...props}
+          >
+            <div className="flex flex-row justify-center space-x-2">
+              <Avatar className="bg-muted h-8 w-8 rounded-md">
+                <AvatarFallback className="text-sm font-medium">
+                  {boardName.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col justify-center space-y-1">
+                <div className="text-sm leading-none font-medium">
+                  {boardName}
+                </div>
+                <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
+                  {workspaceName}
                 </p>
               </div>
             </div>
