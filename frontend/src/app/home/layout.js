@@ -26,84 +26,112 @@ export default function HomeLayout({ children }) {
           </Link>
           <NavigationMenu>
             <NavigationMenuList>
-              {/* Workspaces */}
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Workspaces</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <p className="pt-2 pl-2 text-xs font-semibold">
-                    Your Workspaces
-                  </p>
-                  <ul className="flex w-[200px] flex-col items-start gap-3 p-2">
-                    <WorkspaceListItem
-                      key="A Workspace"
-                      title="A Workspace"
-                      href="#"
-                    />
-                    <WorkspaceListItem
-                      key="B Workspace"
-                      title="B Workspace"
-                      href="#"
-                    />
-                    <WorkspaceListItem
-                      key="C Workspace"
-                      title="C Workspace"
-                      href="#"
-                    />
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              {/* Recent */}
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Recent</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <p className="pt-2 pl-2 text-xs font-semibold">
-                    Your Recent Board
-                  </p>
-                  <ul className="flex w-[200px] flex-col items-start gap-3 p-2">
-                    <BoardListItem
-                      key="Board A"
-                      boardName="Board A"
-                      workspaceName="A Workspace"
-                      href="#"
-                    />
-                    <BoardListItem
-                      key="Board B"
-                      boardName="Board B"
-                      workspaceName="A Workspace"
-                      href="#"
-                    />
-                    <BoardListItem
-                      key="Board C"
-                      boardName="Board C"
-                      workspaceName="B Workspace"
-                      href="#"
-                    />
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-              {/* Starred */}
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Starred</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <p className="pt-2 pl-2 text-xs font-semibold">
-                    Your Starred Boards
-                  </p>
-                  <ul className="flex w-[200px] flex-col items-start gap-3 p-2">
-                    <BoardListItem
-                      key="Board A"
-                      boardName="Board A"
-                      workspaceName="A Workspace"
-                      href="#"
-                    />
-                    <BoardListItem
-                      key="Board B"
-                      boardName="Board B"
-                      workspaceName="A Workspace"
-                      href="#"
-                    />
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
+              {/* sm+: Show Workspaces */}
+              <div className="hidden sm:block">
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>Workspaces</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <p className="pt-2 pl-2 text-xs font-semibold">
+                      Your Workspaces
+                    </p>
+                    <ul className="flex w-[200px] flex-col items-start gap-3 p-2 md:w-[300px] lg:w-[400px]">
+                      <WorkspaceListItem
+                        key="A Workspace"
+                        title="A Workspace"
+                        href="#"
+                      />
+                      <WorkspaceListItem
+                        key="B Workspace"
+                        title="B Workspace"
+                        href="#"
+                      />
+                      <WorkspaceListItem
+                        key="C Workspace"
+                        title="C Workspace"
+                        href="#"
+                      />
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </div>
+
+              {/* md+: Show Recent */}
+              <div className="hidden md:block">
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>Recent</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <p className="pt-2 pl-2 text-xs font-semibold">
+                      Your Recent Board
+                    </p>
+                    <ul className="flex w-[200px] flex-col items-start gap-3 p-2 md:w-[300px] lg:w-[400px]">
+                      <BoardListItem
+                        key="Board A"
+                        boardName="Board A"
+                        workspaceName="A Workspace"
+                        href="#"
+                      />
+                      <BoardListItem
+                        key="Board B"
+                        boardName="Board B"
+                        workspaceName="A Workspace"
+                        href="#"
+                      />
+                      <BoardListItem
+                        key="Board C"
+                        boardName="Board C"
+                        workspaceName="B Workspace"
+                        href="#"
+                      />
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </div>
+
+              {/* lg+: Show Starred */}
+              <div className="hidden lg:block">
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>Starred</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <p className="pt-2 pl-2 text-xs font-semibold">
+                      Your Starred Boards
+                    </p>
+                    <ul className="flex w-[200px] flex-col items-start gap-3 p-2 md:w-[300px] lg:w-[400px]">
+                      <BoardListItem
+                        key="Board A"
+                        boardName="Board A"
+                        workspaceName="A Workspace"
+                        href="#"
+                      />
+                      <BoardListItem
+                        key="Board B"
+                        boardName="Board B"
+                        workspaceName="A Workspace"
+                        href="#"
+                      />
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </div>
+
+              {/* until lg: Show More */}
+              <div className="lg:hidden">
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger>More</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul>
+                      <div className="sm:hidden">
+                        <li>workspaces</li>
+                      </div>
+                      <div className="md:hidden">
+                        <li>recent</li>
+                      </div>
+                      <div className="lg:hidden">
+                        <li>starred</li>
+                      </div>
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+              </div>
             </NavigationMenuList>
           </NavigationMenu>
         </div>
@@ -119,9 +147,9 @@ export default function HomeLayout({ children }) {
 }
 
 const WorkspaceListItem = React.forwardRef(
-  ({ className, title, children, ...props }, ref) => {
+  ({ className, title, ...props }, ref) => {
     return (
-      <li>
+      <li className="w-full">
         <NavigationMenuLink asChild>
           <a
             ref={ref}
@@ -131,18 +159,13 @@ const WorkspaceListItem = React.forwardRef(
             )}
             {...props}
           >
-            <div className="flex flex-row justify-center space-x-2">
+            <div className="flex flex-row items-center justify-start space-x-2">
               <Avatar className="bg-muted h-8 w-8 rounded-md">
                 <AvatarFallback className="text-sm font-medium">
                   {title.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <div className="flex flex-col justify-center space-y-1">
-                <div className="text-sm leading-none font-medium">{title}</div>
-                <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
-                  {children}
-                </p>
-              </div>
+              <div className="text-sm leading-none font-medium">{title}</div>
             </div>
           </a>
         </NavigationMenuLink>
