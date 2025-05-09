@@ -3,7 +3,9 @@ import NavbarMoreOption from "@/components/navbar/navbar-more-option";
 import NavbarRecentOptionContent from "@/components/navbar/navbar-recent-option-content";
 import NavbarStarredOptionContent from "@/components/navbar/navbar-starred-option-content";
 import NavbarWorkspaceOptionContent from "@/components/navbar/navbar-workspace-option-content";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -11,7 +13,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { PlusIcon } from "lucide-react";
+import { Bell, SearchIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { TfiTrello } from "react-icons/tfi";
@@ -70,9 +72,18 @@ export default function HomeLayout({ children }) {
           </NavigationMenu>
         </div>
         <div className="flex flex-row gap-x-2">
-          {/* <p>search bar</p>
-          <p>notif</p>
-          <p>avatar</p> */}
+          <div className="relative hidden w-full lg:block">
+            <SearchIcon className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <Input placeholder="Search" className="pl-10" />
+          </div>
+          <Button size="icon" variant="ghost2">
+            <Bell className="h-4 w-4" />
+          </Button>
+          <Button size="icon" variant="ghost2">
+            <Avatar>
+              <AvatarFallback>US</AvatarFallback>
+            </Avatar>
+          </Button>
         </div>
       </div>
       {children}
