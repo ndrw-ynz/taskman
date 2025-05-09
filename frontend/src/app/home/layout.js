@@ -2,6 +2,7 @@ import NavbarMoreOption from "@/components/navbar/navbar-more-option";
 import NavbarRecentOptionContent from "@/components/navbar/navbar-recent-option-content";
 import NavbarStarredOptionContent from "@/components/navbar/navbar-starred-option-content";
 import NavbarWorkspaceOptionContent from "@/components/navbar/navbar-workspace-option-content";
+import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -9,6 +10,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { TfiTrello } from "react-icons/tfi";
@@ -16,8 +18,8 @@ import { TfiTrello } from "react-icons/tfi";
 export default function HomeLayout({ children }) {
   return (
     <div className="flex h-screen w-screen flex-col">
-      <div className="border-secondary-foreground flex h-[6vh] flex-row items-center justify-between border-b-1 p-3">
-        <div className="flex flex-row items-center gap-x-4">
+      <div className="border-secondary-foreground flex h-[50px] flex-row items-center justify-between border-b-1 p-3">
+        <div className="flex flex-row items-center gap-x-4 pl-2">
           <Link href="/">
             <div className="flex flex-row items-center gap-x-2">
               <TfiTrello className="size-6" />
