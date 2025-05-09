@@ -1,3 +1,4 @@
+import NavbarCreateBoardButton from "@/components/navbar/navbar-create-board-button";
 import NavbarMoreOption from "@/components/navbar/navbar-more-option";
 import NavbarRecentOptionContent from "@/components/navbar/navbar-recent-option-content";
 import NavbarStarredOptionContent from "@/components/navbar/navbar-starred-option-content";
@@ -27,7 +28,7 @@ export default function HomeLayout({ children }) {
             </div>
           </Link>
           <NavigationMenu>
-            <NavigationMenuList>
+            <NavigationMenuList className="space-x-2">
               {/* sm+: Show Workspaces */}
               <div className="hidden sm:block">
                 <NavigationMenuItem>
@@ -62,6 +63,9 @@ export default function HomeLayout({ children }) {
               <div className="lg:hidden">
                 <NavbarMoreOption />
               </div>
+
+              {/* Create Board Button */}
+              <NavbarCreateBoardButton />
             </NavigationMenuList>
           </NavigationMenu>
         </div>
