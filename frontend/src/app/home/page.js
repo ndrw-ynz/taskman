@@ -1,6 +1,7 @@
 import BoardSelectionButton from "@/components/general/board-selection-button";
 import HomeSelectionButton from "@/components/home/home-selection-button";
 import HomeWorkspaceDropdownMenu from "@/components/home/home-workspace-dropdown-menu";
+import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Activity, Clock, Star } from "lucide-react";
 import { TfiTrello } from "react-icons/tfi";
@@ -38,8 +39,27 @@ export default function HomePage() {
       </div>
 
       {/* Center */}
-      <div className="flex w-[600px] flex-col items-center">
-        <p>Center Area</p>
+      <div className="flex w-[600px] flex-col items-center p-4">
+        <Card className="w-full">
+          <CardContent>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec in
+              luctus turpis. Ut tempor enim justo, non tempor ipsum sodales
+              quis. Proin condimentum sapien eros, id dapibus elit mollis vitae.
+              Donec vitae neque pellentesque, gravida nunc et, cursus dolor.
+              Donec lacinia facilisis tellus, ac gravida metus sollicitudin id.
+              Etiam nec mauris sed elit suscipit ullamcorper euismod sit amet
+              urna. Suspendisse potenti. Lorem ipsum dolor sit amet, consectetur
+              adipiscing elit. Duis quis eros orci. Nunc pellentesque dui
+              laoreet semper mollis. Duis feugiat, mi quis faucibus cursus,
+              tellus ligula tempor risus, et ultricies risus eros sit amet
+              felis. Sed posuere est a commodo finibus. Maecenas rutrum suscipit
+              eros at faucibus. Suspendisse sit amet ipsum non mauris pretium
+              vulputate ac eu nisi. Mauris tristique lectus sed augue luctus, at
+              iaculis arcu lacinia. Curabitur nec erat turpis.
+            </p>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Right Sidebar */}
