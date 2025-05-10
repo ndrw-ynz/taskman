@@ -9,7 +9,7 @@ export default function HomePage() {
   return (
     <div className="mt-10 mb-10 flex w-full flex-row justify-center space-x-5">
       {/* Left Sidebar */}
-      <div className="flex w-[250px] flex-col space-y-2 p-4">
+      <div className="hidden w-[250px] flex-col space-y-2 p-4 sm:block">
         {/* Home Selection Buttom */}
         <div className="flex flex-col space-y-1">
           <HomeSelectionButton
@@ -43,7 +43,7 @@ export default function HomePage() {
       </div>
 
       {/* Right Sidebar */}
-      <div className="flex w-[300px] flex-col space-y-4 p-4">
+      <div className="hidden w-[300px] flex-col space-y-4 p-4 lg:block">
         {/* Starred */}
         <div className="flex flex-col space-y-1">
           <div className="flex flex-row items-center space-x-1 pb-2">
