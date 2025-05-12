@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { TfiTrello } from "react-icons/tfi";
 import { z } from "zod";
@@ -23,6 +24,8 @@ const loginSchema = z.object({
 });
 
 export default function LoginPage() {
+  const router = useRouter();
+
   const form = useForm({
     resolver: zodResolver(loginSchema),
     mode: "onSubmit",
@@ -50,6 +53,8 @@ export default function LoginPage() {
 
       if (loginResponse.ok) {
         console.log("Login successful!");
+
+        router.push("/home");
       } else {
         console.log("Login failed!");
       }
