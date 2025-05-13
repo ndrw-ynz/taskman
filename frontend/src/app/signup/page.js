@@ -18,9 +18,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const signupSchema = z.object({
-  email: z.string().email(),
+  username: z.string().email(),
   password: z
     .string()
     .min(10, { message: "The password must contain at least 10 characters" })
@@ -36,7 +37,7 @@ const signupSchema = z.object({
     .min(2, { message: "The name must contain at least two characters." }),
   dateOfBirth: z.date(),
   gender: z.enum(
-    ["man", "woman", "non-binary", "something-else", "prefer-not-say"],
+    ["MAN", "WOMAN", "NON_BINARY", "SOMETHING_ELSE", "PREFER_NOT_TO_SAY"],
     {
       message: "Please select a gender.",
     },
@@ -44,14 +45,16 @@ const signupSchema = z.object({
 });
 
 export default function SignupPage() {
+  const router = useRouter();
   const [step, setStep] = useState(0);
   const [progress, setProgress] = useState(0);
+  const FINAL_STEP = 3;
 
   const form = useForm({
     resolver: zodResolver(signupSchema),
     mode: "onSubmit",
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
       name: "",
       dateOfBirth: new Date(),
@@ -61,35 +64,32 @@ export default function SignupPage() {
 
   const handleNextStep = async () => {
     const moveNext = () => {
-      if (step <= 2) {
+      if (step < FINAL_STEP) {
         const newStep = step + 1;
         setStep(newStep);
-        setProgress((newStep / 3) * 100);
+        setProgress((newStep / FINAL_STEP) * 100);
       }
     };
 
     switch (step) {
       case 0:
-        console.log("email");
-        const emailResult = await form.trigger("email", {
+        const usernameResult = await form.trigger("username", {
           shouldFocus: true,
         });
-        if (emailResult) moveNext();
+        if (usernameResult) moveNext();
         break;
       case 1:
-        console.log("pass");
         const passwordResult = await form.trigger("password", {
           shouldFocus: true,
         });
         if (passwordResult) moveNext();
         break;
       case 2:
-        console.log("personal");
         const personalInfoResult = await form.trigger(
           ["name", "dateOfBirth", "gender"],
           { shouldFocus: true },
         );
-        console.log(personalInfoResult);
+
         if (personalInfoResult) moveNext();
         break;
     }
@@ -99,7 +99,40 @@ export default function SignupPage() {
     if (step >= 0) {
       const newStep = step - 1;
       setStep(newStep);
-      setProgress((newStep / 3) * 100);
+      setProgress((newStep / FINAL_STEP) * 100);
+    }
+  };
+
+  const onSubmit = async (values) => {
+    try {
+      console.log(values);
+
+      const signupResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/taskman/api/users`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            username: values.username,
+            password: values.password,
+            name: values.name,
+            dateOfBirth: values.dateOfBirth,
+            gender: values.gender,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      if (signupResponse.ok) {
+        console.log("Signup successful!");
+
+        router.push("/home");
+      } else {
+        console.log("Signup failed!");
+      }
+    } catch (e) {
+      console.log("Error: ", e);
     }
   };
 
@@ -116,10 +149,14 @@ export default function SignupPage() {
           {/* Signup */}
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(() =>
-                console.log("Accomplished signup form!"),
-              )}
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (step >= FINAL_STEP) {
+                  form.handleSubmit(onSubmit)(e);
+                }
+              }}
             >
+              {" "}
               <div className="pb-6">
                 {step === 0 && (
                   <div className="space-y-2">
@@ -134,7 +171,7 @@ export default function SignupPage() {
                       <div className="space-y-3">
                         <FormField
                           control={form.control}
-                          name="email"
+                          name="username"
                           type="email"
                           placeholder="name@domain.com"
                           render={({ field }) => (
@@ -166,9 +203,16 @@ export default function SignupPage() {
                 type="submit"
                 className="h-12 w-full"
                 variant="navigate"
-                onClick={handleNextStep}
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (step < FINAL_STEP) {
+                    handleNextStep();
+                  } else {
+                    form.handleSubmit(onSubmit)(e);
+                  }
+                }}
               >
-                {step <= 2 ? "Next" : "Create Account"}
+                {step < FINAL_STEP ? "Next" : "Create Account"}
               </Button>
             </form>
           </Form>

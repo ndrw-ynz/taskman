@@ -66,28 +66,28 @@ export default function PersonalFields({ form }) {
                 >
                   <FormItem className="flex items-center space-y-0 space-x-2">
                     <FormControl>
-                      <RadioGroupItem value="man" />
+                      <RadioGroupItem value="MAN" />
                     </FormControl>
                     <FormLabel className="font-normal">Man</FormLabel>
                   </FormItem>
 
                   <FormItem className="flex items-center space-y-0 space-x-2">
                     <FormControl>
-                      <RadioGroupItem value="woman" />
+                      <RadioGroupItem value="WOMAN" />
                     </FormControl>
                     <FormLabel className="font-normal">Woman</FormLabel>
                   </FormItem>
 
                   <FormItem className="flex items-center space-y-0 space-x-2">
                     <FormControl>
-                      <RadioGroupItem value="non-binary" />
+                      <RadioGroupItem value="NON_BINARY" />
                     </FormControl>
                     <FormLabel className="font-normal">Non-binary</FormLabel>
                   </FormItem>
 
                   <FormItem className="flex items-center space-y-0 space-x-2">
                     <FormControl>
-                      <RadioGroupItem value="something-else" />
+                      <RadioGroupItem value="SOMETHING_ELSE" />
                     </FormControl>
                     <FormLabel className="font-normal">
                       Something else
@@ -96,7 +96,7 @@ export default function PersonalFields({ form }) {
 
                   <FormItem className="flex items-center space-y-0 space-x-2">
                     <FormControl>
-                      <RadioGroupItem value="prefer-not-say" />
+                      <RadioGroupItem value="PREFER_NOT_TO_SAY" />
                     </FormControl>
                     <FormLabel className="font-normal">
                       Prefer not to say
