@@ -80,7 +80,7 @@ export default function PersonalFields({ form }) {
 
                   <FormItem className="flex items-center space-y-0 space-x-2">
                     <FormControl>
-                      <RadioGroupItem value="NON-BINARY" />
+                      <RadioGroupItem value="NON_BINARY" />
                     </FormControl>
                     <FormLabel className="font-normal">Non-binary</FormLabel>
                   </FormItem>
