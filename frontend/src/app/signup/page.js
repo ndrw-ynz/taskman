@@ -18,6 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const signupSchema = z.object({
   username: z.string().email(),
@@ -44,6 +45,7 @@ const signupSchema = z.object({
 });
 
 export default function SignupPage() {
+  const router = useRouter();
   const [step, setStep] = useState(0);
   const [progress, setProgress] = useState(0);
   const FINAL_STEP = 3;
@@ -121,6 +123,14 @@ export default function SignupPage() {
           },
         },
       );
+
+      if (signupResponse.ok) {
+        console.log("Signup successful!");
+
+        router.push("/home");
+      } else {
+        console.log("Signup failed!");
+      }
     } catch (e) {
       console.log("Error: ", e);
     }
