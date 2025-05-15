@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -29,13 +30,18 @@ public class AuthenticationService {
      * @return Authenticated user identifier.
      */
     public Long authenticate(String username, String password) {
-        Authentication authenticationRequest = UsernamePasswordAuthenticationToken.unauthenticated(username, password);
-        Authentication authenticationResponse = this.authenticationManager.authenticate(authenticationRequest);
+        try {
+            Authentication authenticationRequest = UsernamePasswordAuthenticationToken.unauthenticated(username, password);
+            Authentication authenticationResponse = this.authenticationManager.authenticate(authenticationRequest);
 
-        SecurityContext securityContext =  SecurityContextHolder.getContext();
-        securityContext.setAuthentication(authenticationResponse);
+            SecurityContext securityContext =  SecurityContextHolder.getContext();
+            securityContext.setAuthentication(authenticationResponse);
 
-        CustomUserDetails user = (CustomUserDetails) authenticationResponse.getPrincipal();
-        return user.getId();
+            CustomUserDetails user = (CustomUserDetails) authenticationResponse.getPrincipal();
+            return user.getId();
+        } catch (AuthenticationException ex) {
+            System.out.println("AUTHENTICATION ERROR: " + ex.getMessage());
+            throw ex;
+        }
     }
 }
