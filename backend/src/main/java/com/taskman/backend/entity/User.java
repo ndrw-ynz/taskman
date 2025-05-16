@@ -3,6 +3,8 @@ package com.taskman.backend.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -23,15 +25,19 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Board> boards = new ArrayList<>();
+
     private User() {}
 
-    public User(Long id, String username, String hashPassword, String name, LocalDate dateOfBirth, Gender gender) {
+    public User(Long id, String username, String hashPassword, String name, LocalDate dateOfBirth, Gender gender, List<Board> boards) {
         this.id = id;
         this.username = username;
         this.hashPassword = hashPassword;
         this.name = name;
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
+        this.boards = boards;
     }
 
     public User(String username, String hashPassword, String name, LocalDate dateOfBirth, Gender gender) {
@@ -94,5 +100,13 @@ public class User {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public List<Board> getBoards() {
+        return boards;
+    }
+
+    public void setBoards(List<Board> boards) {
+        this.boards = boards;
     }
 }
