@@ -40,8 +40,8 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<?> login (HttpServletRequest request, HttpServletResponse response, @RequestBody LoginRequest loginRequest) {
         try {
-            Long userId = authenticationService.authenticate(loginRequest.username(), loginRequest.password());
-            jwt.makeToken(request, response, String.valueOf(userId));
+            String username = authenticationService.authenticate(loginRequest.username(), loginRequest.password());
+            jwt.makeToken(request, response, username);
 
             return ResponseEntity.ok("Login successful");
         } catch (BadCredentialsException ex) {

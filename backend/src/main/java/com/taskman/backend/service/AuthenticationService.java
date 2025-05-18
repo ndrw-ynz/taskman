@@ -27,9 +27,9 @@ public class AuthenticationService {
      * Authenticates a user with the username and password.
      * @param username The user's username.
      * @param password The user's raw password.
-     * @return Authenticated user identifier.
+     * @return Authenticated user's username.
      */
-    public Long authenticate(String username, String password) {
+    public String authenticate(String username, String password) {
         try {
             Authentication authenticationRequest = UsernamePasswordAuthenticationToken.unauthenticated(username, password);
             Authentication authenticationResponse = this.authenticationManager.authenticate(authenticationRequest);
@@ -38,7 +38,7 @@ public class AuthenticationService {
             securityContext.setAuthentication(authenticationResponse);
 
             CustomUserDetails user = (CustomUserDetails) authenticationResponse.getPrincipal();
-            return user.getId();
+            return user.getUsername();
         } catch (AuthenticationException ex) {
             System.out.println("AUTHENTICATION ERROR: " + ex.getMessage());
             throw ex;
