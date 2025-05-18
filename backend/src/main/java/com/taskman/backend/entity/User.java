@@ -18,6 +18,7 @@ public class User {
     )
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="user_sequence")
     private Long id;
+    @Column(unique = true, nullable = false)
     private String username;
     private String hashPassword;
     private String name;
