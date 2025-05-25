@@ -12,14 +12,14 @@ public interface ListRepository extends JpaRepository<ListEntity, Long> {
 
     List<ListEntity> findByBoardIdOrderByPositionAsc(Long boardId);
 
-    @Query("SELECT MAX(l.position) FROM lists l WHERE l.board.id = :boardId")
+    @Query("SELECT MAX(l.position) FROM ListEntity l WHERE l.board.id = :boardId")
     Optional<Integer> findMaxPositionByBoardId(Long boardId);
 
     @Modifying
-    @Query("UPDATE lists l SET l.position = l.position + 1 WHERE l.board.id = :boardId AND l.position BETWEEN :start AND :end")
+    @Query("UPDATE ListEntity l SET l.position = l.position + 1 WHERE l.board.id = :boardId AND l.position BETWEEN :start AND :end")
     void incrementPositionsBetween(Long boardId, int start, int end);
 
     @Modifying
-    @Query("UPDATE lists l SET l.position = l.position - 1 WHERE l.board.id = :boardId AND l.position BETWEEN :start AND :end")
+    @Query("UPDATE ListEntity l SET l.position = l.position - 1 WHERE l.board.id = :boardId AND l.position BETWEEN :start AND :end")
     void decrementPositionsBetween(Long boardId, int start, int end);
 }
