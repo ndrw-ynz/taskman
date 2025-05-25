@@ -62,12 +62,12 @@ public class ListService {
      * and boardId.
      *
      * @param listCreationDTO The details of the new list.
-     * @param boardId The associated boardId of the new list.
      * @return The ListResponseDTO of the newly created list.
      * @throws EntityNotFoundException if board is not found.
      */
     @Transactional
-    public ListResponseDTO createList(ListCreationDTO listCreationDTO, Long boardId) {
+    public ListResponseDTO createList(ListCreationDTO listCreationDTO) {
+        Long boardId = listCreationDTO.boardId();
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new EntityNotFoundException("No board with id " + boardId));
         int maxPosition = listRepository.findMaxPositionByBoardId(boardId).orElse(0);
 
