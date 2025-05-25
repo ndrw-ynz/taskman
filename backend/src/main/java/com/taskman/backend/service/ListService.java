@@ -23,9 +23,9 @@ import java.util.stream.Collectors;
 @Service
 public class ListService {
 
-    private ListRepository listRepository;
-    private ListMapper listMapper;
-    private BoardRepository boardRepository;
+    private final ListRepository listRepository;
+    private final ListMapper listMapper;
+    private final BoardRepository boardRepository;
 
     @Autowired
     public ListService(ListRepository listRepository, ListMapper listMapper, BoardRepository boardRepository) {
