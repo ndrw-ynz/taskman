@@ -28,6 +28,17 @@ public class ListEntity {
     @OneToMany(mappedBy = "list", cascade=CascadeType.ALL, orphanRemoval = true)
     private List<Card> cards = new ArrayList<>();
 
+    public ListEntity() {
+    }
+
+    public ListEntity(Long id, String title, Integer position, Board board, List<Card> cards) {
+        this.id = id;
+        this.title = title;
+        this.position = position;
+        this.board = board;
+        this.cards = cards;
+    }
+
     public Long getId() {
         return id;
     }
