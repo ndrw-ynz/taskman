@@ -89,34 +89,29 @@ public class ListService {
     public ListResponseDTO updateList(ListUpdateDTO listUpdateDTO, Long listId) {
         ListEntity updatedList = listRepository.findById(listId).orElseThrow(() -> new EntityNotFoundException("No list with id " + listId));
 
-        listMapper.updateList(listUpdateDTO, updatedList);
-        listRepository.save(updatedList);
-        return listMapper.toResponse(updatedList);
-    }
+        int currentPosition = updatedList.getPosition();
+        int newPosition = listUpdateDTO.position();
 
-    /**
-     * Updates a list's position.
-     *
-     * @param listId The id of the list.
-     * @param newPosition The new position of the list.
-     * @throws EntityNotFoundException if list is not found.
-     */
-    @Transactional
-    public void updateListPosition(Long listId, int newPosition) {
-        ListEntity list = listRepository.findById(listId).orElseThrow(() -> new EntityNotFoundException("No list with id " + listId));
-
-        int currentPosition = list.getPosition();
-        Long boardId = list.getBoard().getId();
-
-        if (newPosition == currentPosition) return;
-
-        if (newPosition < currentPosition) {
-            listRepository.incrementPositionsBetween(boardId, newPosition, currentPosition - 1);
-        } else {
-            listRepository.decrementPositionsBetween(boardId, currentPosition + 1, newPosition);
+        // 1. Update list details
+        if (listUpdateDTO.title() != null) {
+            listMapper.updateList(listUpdateDTO, updatedList);
         }
 
-        list.setPosition(newPosition);
+        // 2. Update list position
+        if (newPosition >= 1 && newPosition != currentPosition) {
+            Long boardId = updatedList.getBoard().getId();
+            if (newPosition < currentPosition) {
+                listRepository.incrementPositionsBetween(boardId, newPosition, currentPosition - 1);
+            } else {
+                listRepository.decrementPositionsBetween(boardId, currentPosition + 1, newPosition);
+            }
+
+            updatedList.setPosition(newPosition);
+        }
+
+        // 3. Save changes
+        listRepository.save(updatedList);
+        return listMapper.toResponse(updatedList);
     }
 
     /**
