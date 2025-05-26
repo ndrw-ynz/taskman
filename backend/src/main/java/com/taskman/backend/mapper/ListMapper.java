@@ -51,6 +51,7 @@ public class ListMapper {
      */
     public ListResponseDTO toResponse(ListEntity listEntity) {
         return new ListResponseDTO(
+                listEntity.getId(),
                 listEntity.getTitle(),
                 listEntity.getPosition(),
                 listEntity.getBoard().getId()
