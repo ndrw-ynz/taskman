@@ -81,20 +81,6 @@ public class ListController {
     }
 
     /**
-     * Updates the position of a list.
-     *
-     * @param customUserDetails The authenticated user details from the JWT token.
-     * @param listUpdateDTO The updated details for the list.
-     * @param listId The id of the list to be updated.
-     * @return The details of the updated list.
-     */
-    @PatchMapping("/position/{listId}")
-    public ResponseEntity<Void> updateListPosition(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestBody ListUpdateDTO listUpdateDTO, @PathVariable Long listId) {
-        listService.updateListPosition(listId, listUpdateDTO.position());
-        return ResponseEntity.noContent().build();
-    }
-
-    /**
      * Deletes a list by its id.
      *
      * @param customUserDetails The authenticated user details from the JWT token.
