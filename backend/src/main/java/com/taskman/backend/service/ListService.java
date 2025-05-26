@@ -89,16 +89,19 @@ public class ListService {
     public ListResponseDTO updateList(ListUpdateDTO listUpdateDTO, Long listId) {
         ListEntity updatedList = listRepository.findById(listId).orElseThrow(() -> new EntityNotFoundException("No list with id " + listId));
 
-        int currentPosition = updatedList.getPosition();
-        int newPosition = listUpdateDTO.position();
+        Integer currentPosition = updatedList.getPosition();
+        String newTitle = listUpdateDTO.title();
+        Integer newPosition = listUpdateDTO.position();
 
         // 1. Update list details
-        if (listUpdateDTO.title() != null) {
-            listMapper.updateList(listUpdateDTO, updatedList);
+        if (newTitle != null) {
+            System.out.println("New title: " + newTitle);
+            // listMapper.updateList(listUpdateDTO, updatedList);
+            updatedList.setTitle(newTitle);
         }
 
         // 2. Update list position
-        if (newPosition >= 1 && newPosition != currentPosition) {
+        if (newPosition != null && newPosition >= 1 && !newPosition.equals(currentPosition)) {
             Long boardId = updatedList.getBoard().getId();
             if (newPosition < currentPosition) {
                 listRepository.incrementPositionsBetween(boardId, newPosition, currentPosition - 1);
@@ -107,6 +110,7 @@ public class ListService {
             }
 
             updatedList.setPosition(newPosition);
+            System.out.println("New pos: " + newPosition);
         }
 
         // 3. Save changes
