@@ -2,6 +2,7 @@ package com.taskman.backend.mapper;
 
 import com.taskman.backend.dto.CardCreationDTO;
 import com.taskman.backend.dto.CardResponseDTO;
+import com.taskman.backend.dto.CardUpdateDTO;
 import com.taskman.backend.entity.Card;
 import com.taskman.backend.entity.ListEntity;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,18 @@ public class CardMapper {
                 cardCreationDTO.dueDate(),
                 listEntity
         );
+    }
+
+    /**
+     * Updates a Card entity with updated fields from CardUpdateDTO.
+     *
+     * @param cardUpdateDTO The updated card data.
+     * @param card The card entity to be updated.
+     */
+    public void updateCard(CardUpdateDTO cardUpdateDTO, Card card) {
+        card.setTitle(cardUpdateDTO.title());
+        card.setDescription(cardUpdateDTO.description());
+        card.setDueDate(cardUpdateDTO.dueDate());
     }
 
     /**
