@@ -42,9 +42,20 @@ public class CardMapper {
      * @param card The card entity to be updated.
      */
     public void updateCard(CardUpdateDTO cardUpdateDTO, Card card) {
-        card.setTitle(cardUpdateDTO.title());
-        card.setDescription(cardUpdateDTO.description());
-        card.setDueDate(cardUpdateDTO.dueDate());
+        String title = cardUpdateDTO.title();
+        if (title != null) {
+            card.setTitle(title);
+        }
+
+        String description = cardUpdateDTO.description();
+        if (description != null) {
+            card.setDescription(description);
+        }
+
+        LocalDateTime dueDate = cardUpdateDTO.dueDate();
+        if (dueDate != null) {
+            card.setDueDate(dueDate);
+        }
     }
 
     /**
