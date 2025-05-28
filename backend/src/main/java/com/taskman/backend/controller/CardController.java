@@ -43,12 +43,12 @@ public class CardController {
      * Retrieves the list of all cards associated
      * with the provided listId.
      *
-     * @param listid The id of the list.
+     * @param listId The id of the list.
      * @return The list of all cards associated with the provided listId.
      */
     @GetMapping("/list/{listId}")
-    public ResponseEntity<List<CardResponseDTO>> getAllCardsByListId(@PathVariable Long listid) {
-        return ResponseEntity.ok(cardService.getAllCardsByList(listid));
+    public ResponseEntity<List<CardResponseDTO>> getAllCardsByListId(@PathVariable Long listId) {
+        return ResponseEntity.ok(cardService.getAllCardsByList(listId));
     }
 
     /**
