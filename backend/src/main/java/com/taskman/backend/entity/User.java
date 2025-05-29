@@ -27,18 +27,18 @@ public class User {
     private Gender gender;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Board> boards = new ArrayList<>();
+    private List<Workspace> workspaces = new ArrayList<>();
 
     private User() {}
 
-    public User(Long id, String username, String hashPassword, String name, LocalDate dateOfBirth, Gender gender, List<Board> boards) {
+    public User(Long id, String username, String hashPassword, String name, LocalDate dateOfBirth, Gender gender, List<Workspace> workspaces) {
         this.id = id;
         this.username = username;
         this.hashPassword = hashPassword;
         this.name = name;
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
-        this.boards = boards;
+        this.workspaces = workspaces;
     }
 
     public User(String username, String hashPassword, String name, LocalDate dateOfBirth, Gender gender) {
@@ -103,11 +103,11 @@ public class User {
         this.gender = gender;
     }
 
-    public List<Board> getBoards() {
-        return boards;
+    public List<Workspace> getWorkspaces() {
+        return workspaces;
     }
 
-    public void setBoards(List<Board> boards) {
-        this.boards = boards;
+    public void setWorkspaces(List<Workspace> workspaces) {
+        this.workspaces = workspaces;
     }
 }
