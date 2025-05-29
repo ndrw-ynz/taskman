@@ -51,14 +51,14 @@ public class BoardController {
 
     /**
      * Retrieves the list of all boards associated
-     * to the provided user id.
+     * with the provided workspace id.
      *
-     * @param userId The id of the user.
-     * @return The list of all boards associated to the provided user id.
+     * @param workspaceId The id of the workspace.
+     * @return The list of all boards associated with the provided workspace id.
      */
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<BoardResponseDTO>> getAllBoardsByUserId(@PathVariable Long userId) {
-        return ResponseEntity.ok(boardService.getAllBoardsByUserId(userId));
+    @GetMapping("/workspace/{workspaceId}")
+    public ResponseEntity<List<BoardResponseDTO>> getAllBoardsByWorkspaceId(@PathVariable Long workspaceId) {
+        return ResponseEntity.ok(boardService.getAllBoardsByWorkspaceId(workspaceId));
     }
 
     /**
@@ -71,7 +71,8 @@ public class BoardController {
     @PostMapping
     public ResponseEntity<BoardResponseDTO> createBoard(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestBody BoardCreationDTO boardCreationDTO) {
         Long ownerId = customUserDetails.getId();
-        BoardResponseDTO createdBoard = boardService.createBoard(boardCreationDTO, ownerId);
+
+        BoardResponseDTO createdBoard = boardService.createBoard(boardCreationDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdBoard);
     }
 
