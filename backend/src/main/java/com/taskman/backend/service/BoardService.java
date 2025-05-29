@@ -4,10 +4,10 @@ import com.taskman.backend.dto.BoardCreationDTO;
 import com.taskman.backend.dto.BoardResponseDTO;
 import com.taskman.backend.dto.BoardUpdateDTO;
 import com.taskman.backend.entity.Board;
-import com.taskman.backend.entity.User;
+import com.taskman.backend.entity.Workspace;
 import com.taskman.backend.mapper.BoardMapper;
 import com.taskman.backend.repository.BoardRepository;
-import com.taskman.backend.repository.UserRepository;
+import com.taskman.backend.repository.WorkspaceRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +25,15 @@ import java.util.stream.Collectors;
 public class BoardService {
 
     private final BoardRepository boardRepository;
-    private final UserRepository userRepository;
+    private final WorkspaceRepository workspaceRepository;
     private final BoardMapper boardMapper;
 
     @Autowired
-    public BoardService(BoardRepository boardRepository, BoardMapper boardMapper, UserRepository userRepository) {
+    public BoardService(BoardRepository boardRepository, BoardMapper boardMapper, WorkspaceRepository workspaceRepository
+    ) {
         this.boardRepository = boardRepository;
-        this.userRepository = userRepository;
         this.boardMapper = boardMapper;
+        this.workspaceRepository = workspaceRepository;
     }
 
     /**
@@ -59,29 +60,29 @@ public class BoardService {
 
     /**
      * Fetches the list of all boards associated with the
-     * provided user id.
+     * provided workspace id.
      *
-     * @param ownerId The user id of the owner.
-     * @return The list of BoardResponseDTOs that belong to the user.
+     * @param workspaceId The workspace id.
+     * @return The list of BoardResponseDTOs that belong to the specified workspace.
      */
-    public List<BoardResponseDTO> getAllBoardsByUserId(Long ownerId) {
-        List<Board> boards = boardRepository.findAllByOwnerId(ownerId);
+    public List<BoardResponseDTO> getAllBoardsByWorkspaceId(Long workspaceId) {
+        List<Board> boards = boardRepository.findAllByWorkspaceId(workspaceId);
         return boards.stream().map(boardMapper::toResponse).collect(Collectors.toList());
     }
 
     /**
      * Creates a new board with the provided board details
-     * and user id.
+     * and workspace id.
      *
      * @param boardCreationDTO The details of the new board.
-     * @param ownerId The user id of the owner of the created board.
      * @return The BoardResponseDTO of the newly created board.
-     * @throws EntityNotFoundException if the provided owner id is not found.
+     * @throws EntityNotFoundException if the provided workspace id is not found.
      */
     @Transactional
-    public BoardResponseDTO createBoard(BoardCreationDTO boardCreationDTO, Long ownerId) {
-        User user = userRepository.findById(ownerId).orElseThrow(() -> new EntityNotFoundException("No user with id " + ownerId));
-        Board newBoard = boardMapper.toEntity(boardCreationDTO, user);
+    public BoardResponseDTO createBoard(BoardCreationDTO boardCreationDTO) {
+        Long workspaceId = boardCreationDTO.workspaceId();
+        Workspace workspace = workspaceRepository.findById(workspaceId).orElseThrow(() -> new EntityNotFoundException("No workspace with id " + workspaceId));
+        Board newBoard = boardMapper.toEntity(boardCreationDTO, workspace);
         Board createdBoard = boardRepository.save(newBoard);
         return boardMapper.toResponse(createdBoard);
     }
@@ -100,7 +101,7 @@ public class BoardService {
     public BoardResponseDTO updateBoard(BoardUpdateDTO boardUpdateDTO, Long boardId, Long ownerId) {
         Board updatedBoard = boardRepository.findById(boardId).orElseThrow(() -> new EntityNotFoundException("No board with id " + boardId));
 
-        if (!updatedBoard.getOwner().getId().equals(ownerId)) {
+        if (!updatedBoard.getWorkspace().getOwner().getId().equals(ownerId)) {
             throw new AccessDeniedException("You don't own this board.");
         }
 
@@ -121,7 +122,7 @@ public class BoardService {
     public void deleteBoard(Long boardId, Long ownerId) {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new EntityNotFoundException("No board with id " + boardId));
 
-        if (!board.getOwner().getId().equals(ownerId)) {
+        if (!board.getWorkspace().getOwner().getId().equals(ownerId)) {
             throw new AccessDeniedException("You don't own this board.");
         }
 
