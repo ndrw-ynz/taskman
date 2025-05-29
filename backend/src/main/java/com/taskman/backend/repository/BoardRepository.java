@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
-    List<Board> findAllByOwnerId(Long ownerId);
+    List<Board> findAllByWorkspaceId(Long workspaceId);
 }
