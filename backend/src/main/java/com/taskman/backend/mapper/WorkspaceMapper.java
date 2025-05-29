@@ -41,8 +41,15 @@ public class WorkspaceMapper {
      * @param workspace The workspace to be updated.
      */
     public void updateWorkspace(WorkspaceUpdateDTO workspaceUpdateDTO, Workspace workspace) {
-        workspace.setName(workspaceUpdateDTO.name());
-        workspace.setDescription(workspaceUpdateDTO.description());
+        String name = workspaceUpdateDTO.name();
+        if (name != null) {
+            workspace.setName(name);
+        }
+
+        String description = workspaceUpdateDTO.description();
+        if (description != null) {
+            workspace.setDescription(description);
+        }
     }
 
     /**
