@@ -25,8 +25,8 @@ public class Board {
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name="owner_id")
-    private User owner;
+    @JoinColumn(name="workspace_id")
+    private Workspace workspace;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ListEntity> lists = new ArrayList<>();
@@ -34,13 +34,13 @@ public class Board {
     public Board() {
     }
 
-    public Board(Long id, String title, String description, LocalDateTime createdAt, LocalDateTime updatedAt, User owner, List<ListEntity> lists) {
+    public Board(Long id, String title, String description, LocalDateTime createdAt, LocalDateTime updatedAt, Workspace workspace, List<ListEntity> lists) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.owner = owner;
+        this.workspace = workspace;
         this.lists = lists;
     }
 
@@ -84,12 +84,12 @@ public class Board {
         this.updatedAt = updatedAt;
     }
 
-    public User getOwner() {
-        return owner;
+    public Workspace getWorkspace() {
+        return workspace;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
+    public void setWorkspace(Workspace workspace) {
+        this.workspace = workspace;
     }
 
     public List<ListEntity> getLists() {
