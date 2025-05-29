@@ -4,7 +4,7 @@ import com.taskman.backend.dto.BoardCreationDTO;
 import com.taskman.backend.dto.BoardResponseDTO;
 import com.taskman.backend.dto.BoardUpdateDTO;
 import com.taskman.backend.entity.Board;
-import com.taskman.backend.entity.User;
+import com.taskman.backend.entity.Workspace;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -20,17 +20,17 @@ public class BoardMapper {
      * Converts a BoardCreation DTO to a Board entity (partial).
      *
      * @param boardCreationDTO The board creation data.
-     * @param owner The user associated with the board.
+     * @param workspace The workspace associated with the board.
      * @return Board entity with fields from creation data.
      */
-    public Board toEntity(BoardCreationDTO boardCreationDTO, User owner) {
+    public Board toEntity(BoardCreationDTO boardCreationDTO, Workspace workspace) {
         return new Board(
                 null,
                 boardCreationDTO.title(),
                 boardCreationDTO.description(),
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                owner,
+                workspace,
                 new ArrayList<>()
         );
     }
@@ -60,7 +60,7 @@ public class BoardMapper {
                 board.getDescription(),
                 board.getCreatedAt(),
                 board.getUpdatedAt(),
-                board.getOwner().getId()
+                board.getWorkspace().getId()
         );
     }
 
