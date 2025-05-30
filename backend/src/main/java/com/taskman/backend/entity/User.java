@@ -3,6 +3,8 @@ package com.taskman.backend.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -16,6 +18,7 @@ public class User {
     )
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="user_sequence")
     private Long id;
+    @Column(unique = true, nullable = false)
     private String username;
     private String hashPassword;
     private String name;
@@ -23,15 +26,19 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Workspace> workspaces = new ArrayList<>();
+
     private User() {}
 
-    public User(Long id, String username, String hashPassword, String name, LocalDate dateOfBirth, Gender gender) {
+    public User(Long id, String username, String hashPassword, String name, LocalDate dateOfBirth, Gender gender, List<Workspace> workspaces) {
         this.id = id;
         this.username = username;
         this.hashPassword = hashPassword;
         this.name = name;
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
+        this.workspaces = workspaces;
     }
 
     public User(String username, String hashPassword, String name, LocalDate dateOfBirth, Gender gender) {
@@ -94,5 +101,13 @@ public class User {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public List<Workspace> getWorkspaces() {
+        return workspaces;
+    }
+
+    public void setWorkspaces(List<Workspace> workspaces) {
+        this.workspaces = workspaces;
     }
 }

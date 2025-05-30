@@ -18,7 +18,7 @@ import Link from "next/link";
 import React from "react";
 import { TfiTrello } from "react-icons/tfi";
 
-export default function HomeLayout({ children }) {
+export default function MainLayout({ children }) {
   return (
     <div className="flex h-screen w-screen flex-col">
       <div className="border-secondary-foreground flex h-[50px] flex-row items-center justify-between border-b-1 p-3">
