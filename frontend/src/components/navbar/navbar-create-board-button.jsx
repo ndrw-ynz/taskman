@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const boardSchema = z.object({
   title: z.string({ message: "Board title is required." }).min(1),
@@ -31,6 +32,7 @@ const boardSchema = z.object({
 });
 
 export default function NavbarCreateBoardButton() {
+  const router = useRouter();
   const form = useForm({
     resolver: zodResolver(boardSchema),
     mode: "onSubmit",
@@ -81,6 +83,9 @@ export default function NavbarCreateBoardButton() {
 
       form.reset();
       alert("Board created successfully.");
+
+      const createdBoard = await response.json();
+      router.push(`/board/${createdBoard.id}/${createdBoard.title}`)
     } catch (error) {
       console.log("Error creating board: ", error);
     }
