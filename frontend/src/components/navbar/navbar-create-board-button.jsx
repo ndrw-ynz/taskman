@@ -22,12 +22,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { useEffect, useState } from "react";
 
 const boardSchema = z.object({
-  boardName: z.string({ message: "Board title is required." }).min(1),
-  workspace: z.enum(["workspace_x", "workspace_y", "workspace_z"], {
-    message: "Select a workspace.",
-  }),
+  title: z.string({ message: "Board title is required." }).min(1),
+  description: z.string(),
+  workspaceId: z.number({ required_error: "Workspace is required." })
 });
 
 export default function NavbarCreateBoardButton() {
@@ -35,9 +35,33 @@ export default function NavbarCreateBoardButton() {
     resolver: zodResolver(boardSchema),
     mode: "onSubmit",
     defaultValues: {
-      boardName: "",
+      title: "",
+      description: "",
+      workspaceId: undefined
     },
   });
+
+  const [workspaces, setWorkspaces] = useState([]);
+
+  useEffect(() => {
+    const fetchWorkspaces = async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/taskman/api/workspaces/user`, {
+        credentials: "include",
+      });
+
+      if (!res.ok) throw new Error("Failed to fetch workspaces");
+      const data = await res.json();
+
+      // Assume data is an array of workspaces: [{ id: string, name: string }]
+      setWorkspaces(data);
+    } catch (err) {
+      console.error("Error fetching workspaces", err);
+    }
+  };
+
+  fetchWorkspaces();
+  }, [])
 
   return (
     <Popover>
@@ -59,7 +83,7 @@ export default function NavbarCreateBoardButton() {
             {/* Board Name */}
             <FormField
               control={form.control}
-              name="boardName"
+              name="title"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Board title</FormLabel>
@@ -70,25 +94,41 @@ export default function NavbarCreateBoardButton() {
                 </FormItem>
               )}
             />
+            {/* Board Description */}
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Input {...field}></Input>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             {/* Workspace */}
             <FormField
               control={form.control}
-              name="workspace"
+              name="workspaceId"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>Workspace</FormLabel>
                   <FormControl className="w-full">
                     <Select
-                      onValueChange={field.onChange}
+                      onValueChange={(val) => field.onChange(parseInt(val))}
                       defaultValue={field.value}
                     >
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select a workspace" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="workspace_x">Workspace X</SelectItem>
-                        <SelectItem value="workspace_y">Workspace Y</SelectItem>
-                        <SelectItem value="workspace_z">Workspace Z</SelectItem>
+                        {workspaces.map((workspace) => (
+                          <SelectItem key={workspace.id} value={workspace.id.toString()}>
+                            {workspace.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormControl>
