@@ -63,6 +63,29 @@ export default function NavbarCreateBoardButton() {
   fetchWorkspaces();
   }, [])
 
+  const onSubmit = async (data) => {
+    try {
+      console.log(data);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/taskman/api/boards`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(data)
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to create board.")
+      };
+
+      form.reset();
+      alert("Board created successfully.");
+    } catch (error) {
+      console.log("Error creating board: ", error);
+    }
+  }
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -79,7 +102,7 @@ export default function NavbarCreateBoardButton() {
       <PopoverContent className="flex flex-col space-y-3">
         <p className="text-center font-semibold">Create Board</p>
         <Form {...form}>
-          <form className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {/* Board Name */}
             <FormField
               control={form.control}
