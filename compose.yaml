@@ -19,5 +19,14 @@ services:
     depends_on:
       - db
 
+  frontend:
+    build: ./frontend
+    env_file:
+      - ./frontend/.env.local
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
 volumes:
   taskman_data:
