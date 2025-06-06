@@ -1,12 +1,40 @@
+"use client";
+
 import BoardSelectionButton from "@/components/general/board-selection-button";
 import HomeSelectionButton from "@/components/home/home-selection-button";
 import HomeWorkspaceDropdownMenu from "@/components/home/home-workspace-dropdown-menu";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Activity, Clock, Star } from "lucide-react";
+import { useEffect, useState } from "react";
 import { TfiTrello } from "react-icons/tfi";
 
 export default function HomePage() {
+  const [workspaces, setWorkspaces] = useState([]);
+
+  useEffect(() => {
+    const fetchWorkspaces = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/taskman/api/workspaces/user`,
+          {
+            credentials: "include",
+          },
+        );
+
+        if (!res.ok) throw new Error("Failed to fetch workspaces");
+        const data = await res.json();
+
+        // Assume data is an array of workspaces: [{ id: string, name: string }]
+        setWorkspaces(data);
+      } catch (err) {
+        console.error("Error fetching workspaces", err);
+      }
+    };
+
+    fetchWorkspaces();
+  }, []);
+
   return (
     <div className="mt-10 mb-10 flex w-full flex-row justify-center space-x-5">
       {/* Left Sidebar */}
@@ -31,9 +59,12 @@ export default function HomePage() {
         <div className="flex flex-col space-y-2">
           <p className="text-sm font-semibold">Workspaces</p>
           <div className="flex flex-col space-y-1">
-            <HomeWorkspaceDropdownMenu name="A Workspace" />
-            <HomeWorkspaceDropdownMenu name="B Workspace" />
-            <HomeWorkspaceDropdownMenu name="C Workspace" />
+            {workspaces.map((workspace) => (
+              <HomeWorkspaceDropdownMenu
+                key={workspace.id}
+                name={workspace.name}
+              />
+            ))}
           </div>
         </div>
       </div>
