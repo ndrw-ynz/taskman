@@ -1,42 +1,47 @@
+"use client";
+
 import BoardSelectionButton from "@/components/general/board-selection-button";
+import UserLeftSidebar from "@/components/general/user-left-sidebar";
 import HomeSelectionButton from "@/components/home/home-selection-button";
 import HomeWorkspaceDropdownMenu from "@/components/home/home-workspace-dropdown-menu";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Activity, Clock, Star } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { TfiTrello } from "react-icons/tfi";
 
 export default function HomePage() {
+  const router = useRouter();
+  const [workspaces, setWorkspaces] = useState([]);
+
+  useEffect(() => {
+    const fetchWorkspaces = async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/taskman/api/workspaces/user`,
+          {
+            credentials: "include",
+          },
+        );
+
+        if (!res.ok) throw new Error("Failed to fetch workspaces");
+        const data = await res.json();
+
+        // Assume data is an array of workspaces: [{ id: string, name: string }]
+        setWorkspaces(data);
+      } catch (err) {
+        console.error("Error fetching workspaces", err);
+      }
+    };
+
+    fetchWorkspaces();
+  }, []);
+
   return (
     <div className="mt-10 mb-10 flex w-full flex-row justify-center space-x-5">
       {/* Left Sidebar */}
-      <div className="hidden w-[250px] flex-col space-y-2 p-4 sm:block">
-        {/* Home Selection Buttom */}
-        <div className="flex flex-col space-y-1">
-          <HomeSelectionButton
-            icon={<TfiTrello className="h-4 w-4" />}
-            name="Boards"
-            onClick={null}
-          />
-          <HomeSelectionButton
-            icon={<Activity className="h-4 w-4" />}
-            name="Home"
-            onClick={null}
-          />
-        </div>
-
-        <Separator className="w-full" />
-
-        {/* Workspaces */}
-        <div className="flex flex-col space-y-2">
-          <p className="text-sm font-semibold">Workspaces</p>
-          <div className="flex flex-col space-y-1">
-            <HomeWorkspaceDropdownMenu name="A Workspace" />
-            <HomeWorkspaceDropdownMenu name="B Workspace" />
-            <HomeWorkspaceDropdownMenu name="C Workspace" />
-          </div>
-        </div>
-      </div>
+      <UserLeftSidebar workspaces={workspaces} />
 
       {/* Center */}
       <div className="flex w-[600px] flex-col items-center p-4">
