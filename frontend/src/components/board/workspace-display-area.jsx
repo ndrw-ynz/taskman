@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Card } from "../ui/card";
+import { Popover, PopoverTrigger } from "../ui/popover";
+import { Button } from "../ui/button";
+import BoardCreationPopoverContent from "../general/board-creation-popover-content";
 
 export default function WorkspaceDisplayArea({ workspace }) {
   console.log(workspace);
@@ -57,9 +60,21 @@ export default function WorkspaceDisplayArea({ workspace }) {
           </a>
         ))}
         {/* Create New Board Card*/}
-        <Card className="bg-secondary border-primary-foreground h-[90px] items-center justify-center rounded-md border-2 p-2">
-          <p className="font-medium">Create new board</p>
-        </Card>
+        <Popover>
+          <PopoverTrigger asChild>
+            {/* until lg: Show + */}
+            <div>
+              <Card
+                role="button"
+                tabIndex={0}
+                className="bg-secondary border-primary-foreground h-[90px] cursor-pointer items-center justify-center rounded-md border-2 p-2 transition hover:opacity-90"
+              >
+                <p className="font-medium">Create new board</p>
+              </Card>
+            </div>
+          </PopoverTrigger>
+          <BoardCreationPopoverContent />
+        </Popover>
       </div>
     </div>
   );
