@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Card } from "../ui/card";
 
 export function BoardAddListButton({
+  boardId,
   buttonText = "Add another list",
   confirmText = "Add list",
   placeholder = "Enter list name...",
@@ -41,11 +42,34 @@ export function BoardAddListButton({
     }
   }, [isEditing]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (title.trim()) {
       setTitle("");
       setIsEditing(false);
+    }
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/taskman/api/lists`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({ title: title, boardId: boardId }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to create list.");
+      }
+
+      setTitle("");
+      alert("List created successfully.");
+    } catch (err) {
+      console.log("Error creating list: ", err);
     }
   };
 
