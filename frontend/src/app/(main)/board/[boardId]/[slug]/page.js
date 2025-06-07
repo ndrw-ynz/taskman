@@ -2,7 +2,6 @@
 
 import { BoardAddListButton } from "@/components/board/board-add-list-button";
 import { Card } from "@/components/ui/card";
-import { PlusIcon } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -48,7 +47,7 @@ export default function BoardPage() {
         </Card>
       ))}
       {/* Add List  */}
-      <BoardAddListButton />
+      <BoardAddListButton boardId={boardId} />
     </div>
   );
 }
