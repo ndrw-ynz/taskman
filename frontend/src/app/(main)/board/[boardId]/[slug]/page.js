@@ -1,6 +1,8 @@
 "use client";
 
+import BoardAddCardButton from "@/components/board/board-add-card-button";
 import { BoardAddListButton } from "@/components/board/board-add-list-button";
+import BoardCardsDisplay from "@/components/board/board-cards-display";
 import { Card } from "@/components/ui/card";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -41,12 +43,15 @@ export default function BoardPage() {
       {lists.map((list) => (
         <Card
           key={list.id}
-          className="bg-card border-secondary flex h-fit w-[300px] cursor-pointer flex-row rounded-lg p-3 transition hover:opacity-90"
+          className="bg-card border-secondary flex h-fit w-[300px] cursor-pointer flex-col rounded-lg p-3 transition hover:opacity-90"
         >
           <p className="font-bold">{list.title}</p>
+          {/* List of Cards from List */}
+          <BoardCardsDisplay listId={list.id} />
+          <BoardAddCardButton listId={list.id} />
         </Card>
       ))}
-      {/* Add List  */}
+      {/* Add List */}
       <BoardAddListButton boardId={boardId} />
     </div>
   );
