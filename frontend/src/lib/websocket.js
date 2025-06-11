@@ -1,6 +1,5 @@
-import { useEffect, useReducer, useRef, useCallback } from "react";
+import { useEffect, useReducer, useRef, useCallback, useState } from "react";
 import { Client } from "@stomp/stompjs";
-import SockJS from "sockjs-client";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -36,7 +35,7 @@ export const useWebSocketService = (
   });
 
   const clientRef = useRef(null);
-  const isConnected = useRef(false);
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     clientRef.current = state.client;
@@ -46,13 +45,16 @@ export const useWebSocketService = (
     if (state.client || isConnected.current) return;
 
     const client = new Client({
-      webSocketFactory: () => new SockJS(webSocketUrl),
+      brokerURL: webSocketUrl,
       debug: (str) => console.log("debugLog", str),
+      connectHeaders: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
       reconnectDelay: 5000,
       heartbeatIncoming: 1000,
       heartbeatOutgoing: 1000,
       onConnect: () => {
-        isConnected.current = true;
+        setIsConnected(true);
         console.log("WebSocket connected");
         onConnectCallback();
       },
@@ -68,7 +70,8 @@ export const useWebSocketService = (
   const subscribe = useCallback(
     (destination, callback) => {
       const client = clientRef.current;
-      if (!client || !isConnected.current) return;
+      console.log("CLIENT: ", client);
+      if (!client || !isConnected) return;
 
       if (state.subscriptions.has(destination)) return;
 
@@ -86,7 +89,7 @@ export const useWebSocketService = (
 
   const send = useCallback((destination, body = {}) => {
     const client = clientRef.current;
-    if (!client || !isConnected.current) return;
+    if (!client || !isConnected) return;
     client.publish({ destination, body: JSON.stringify(body) });
   }, []);
 
@@ -103,13 +106,20 @@ export const useWebSocketService = (
 
   const disconnect = useCallback(() => {
     const client = clientRef.current;
-    if (client && isConnected.current) {
+    if (client && isConnected) {
       state.subscriptions.forEach((subscription) => subscription.unsubscribe());
       client.deactivate();
       dispatch({ type: "CLEAR_CLIENT" });
-      isConnected.current = false;
+      setIsConnected(false);
     }
   }, [state.subscriptions]);
 
-  return { connect, subscribe, send, unsubscribe, disconnect };
+  return {
+    connect,
+    subscribe,
+    send,
+    unsubscribe,
+    disconnect,
+    isConnected,
+  };
 };
