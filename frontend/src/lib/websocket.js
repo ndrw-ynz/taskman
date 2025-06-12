@@ -42,7 +42,7 @@ export const useWebSocketService = (
   }, [state.client]);
 
   const connect = useCallback(() => {
-    if (state.client || isConnected.current) return;
+    if (state.client || isConnected) return;
 
     const client = new Client({
       brokerURL: webSocketUrl,
@@ -70,7 +70,6 @@ export const useWebSocketService = (
   const subscribe = useCallback(
     (destination, callback) => {
       const client = clientRef.current;
-      console.log("CLIENT: ", client);
       if (!client || !isConnected) return;
 
       if (state.subscriptions.has(destination)) return;
@@ -78,13 +77,12 @@ export const useWebSocketService = (
       const subscription = client.subscribe(destination, (message) => {
         if (message.body) callback(JSON.parse(message.body));
       });
-
       dispatch({
         type: "ADD_SUBSCRIPTION",
         payload: { destination, subscription },
       });
     },
-    [state.subscriptions],
+    [state.subscriptions, isConnected],
   );
 
   const send = useCallback((destination, body = {}) => {
