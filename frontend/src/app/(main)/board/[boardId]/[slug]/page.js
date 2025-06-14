@@ -32,6 +32,41 @@ export default function BoardPage() {
   // Configure subscription after connection changes.
   useEffect(() => {
     if (!isConnected) return;
+    // Subscribe to /topic/lists
+    subscribe("/topic/lists", (message) => {
+      console.log("Entity changed", message);
+
+      switch (message.type) {
+        case "LIST_CREATED":
+          setLists((prevList) => {
+            const alreadyExists = prevList.some(
+              (list) => list.id === message.payload.id,
+            );
+            if (alreadyExists) return prevList;
+
+            return [...prevList, message.payload];
+          });
+          break;
+        case "LIST_UPDATED":
+          setLists((prevList) => {
+            const updatedList = prevList.map((list) =>
+              list.id === message.payload.id ? message.payload : list,
+            );
+            return updatedList;
+          });
+          break;
+        case "LIST_DELETED":
+          setLists((prevList) => {
+            const filteredCards = prevList.filter(
+              (card) => card.id !== message.payload.id,
+            );
+            return filteredCards;
+          });
+          break;
+      }
+    });
+
+    // Subscribe to /topic/cards
     subscribe("/topic/cards", (message) => {
       console.log("Entity changed", message);
 
@@ -88,6 +123,7 @@ export default function BoardPage() {
 
     return () => {
       unsubscribe("/topic/cards");
+      unsubscribe("/topic/lists");
       disconnect();
     };
   }, [isConnected]);
