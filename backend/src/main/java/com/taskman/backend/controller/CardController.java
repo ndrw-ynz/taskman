@@ -8,10 +8,12 @@ import com.taskman.backend.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * REST controller for managing cards.
@@ -22,10 +24,12 @@ import java.util.List;
 public class CardController {
 
     private final CardService cardService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Autowired
-    public CardController(CardService cardService) {
+    public CardController(CardService cardService, SimpMessagingTemplate messagingTemplate) {
         this.cardService = cardService;
+        this.messagingTemplate = messagingTemplate;
     }
 
     /**
@@ -63,6 +67,16 @@ public class CardController {
         Long ownerId = customUserDetails.getId();
 
         CardResponseDTO createdCard = cardService.createCard(cardCreationDTO);
+
+        // WebSocket - Broadcast to subscribers after creation.
+        Map<String, Object> asa = Map.of(
+                "type", "CARD_CREATED",
+                "payload", createdCard
+        );
+        messagingTemplate.convertAndSend("/topic/cards", Map.of(
+                "type", "CARD_CREATED",
+                "payload", createdCard
+                ));
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCard);
     }
 
@@ -77,6 +91,10 @@ public class CardController {
     @PatchMapping("/{cardId}")
     public ResponseEntity<CardResponseDTO> updateCard(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestBody CardUpdateDTO cardUpdateDTO, @PathVariable Long cardId) {
         CardResponseDTO updatedCard = cardService.updateCard(cardUpdateDTO, cardId);
+        // WebSocket - Broadcast to subscribers after update.
+        messagingTemplate.convertAndSend("/topic/cards", Map.of(
+                "type","CARD_UPDATED",
+                "payload", updatedCard));
         return ResponseEntity.ok(updatedCard);
     }
 
@@ -90,6 +108,10 @@ public class CardController {
     @DeleteMapping("/{cardId}")
     public ResponseEntity<Void> deleteCard(@AuthenticationPrincipal CustomUserDetails customUserDetails, @PathVariable Long cardId) {
         cardService.deleteCard(cardId);
+        // WebSocket - Broadcast to subscribers after deletion.
+        messagingTemplate.convertAndSend("/topic/cards", Map.of(
+                "type", "CARD_DELETED",
+                "deletedId", cardId));
         return ResponseEntity.noContent().build();
     }
 }
