@@ -8,10 +8,12 @@ import com.taskman.backend.service.ListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * REST controller for managing lists.
@@ -22,10 +24,12 @@ import java.util.List;
 public class ListController {
 
     private final ListService listService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Autowired
-    public ListController(ListService listService) {
+    public ListController(ListService listService, SimpMessagingTemplate messagingTemplate) {
         this.listService = listService;
+        this.messagingTemplate = messagingTemplate;
     }
 
     /**
@@ -62,8 +66,14 @@ public class ListController {
     public ResponseEntity<ListResponseDTO> createList(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestBody ListCreationDTO listCreationDTO) {
         Long ownerId = customUserDetails.getId();
 
-        ListResponseDTO createdBoard = listService.createList(listCreationDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdBoard);
+        ListResponseDTO createdList = listService.createList(listCreationDTO);
+
+        // WebSocket - Broadcast to subscribers after creation.
+        messagingTemplate.convertAndSend("/topic/lists", Map.of(
+                "type", "LIST_CREATED",
+                "payload", createdList
+        ));
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdList);
     }
 
     /**
@@ -76,8 +86,12 @@ public class ListController {
      */
     @PatchMapping("/{listId}")
     public ResponseEntity<ListResponseDTO> updateList(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestBody ListUpdateDTO listUpdateDTO, @PathVariable Long listId) {
-        ListResponseDTO updatedBoard = listService.updateList(listUpdateDTO, listId);
-        return ResponseEntity.ok(updatedBoard);
+        ListResponseDTO updatedList = listService.updateList(listUpdateDTO, listId);
+        // WebSocket - Broadcast to subscribers after update.
+        messagingTemplate.convertAndSend("/topic/lists", Map.of(
+                "type","LIST_UPDATED",
+                "payload", updatedList));
+        return ResponseEntity.ok(updatedList);
     }
 
     /**
@@ -90,6 +104,10 @@ public class ListController {
     @DeleteMapping("/{listId}")
     public ResponseEntity<Void> deleteBoard(@AuthenticationPrincipal CustomUserDetails customUserDetails, @PathVariable Long listId) {
         listService.deleteList(listId);
+        // WebSocket - Broadcast to subscribers after deletion.
+        messagingTemplate.convertAndSend("/topic/lists", Map.of(
+                "type", "LIST_DELETED",
+                "deletedId", listId));
         return ResponseEntity.noContent().build();
     }
 }
