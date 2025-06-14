@@ -1,34 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Card } from "../ui/card";
 
-export default function BoardCardsDisplay({ listId }) {
-  const [cards, setCards] = useState([]);
-
-  useEffect(() => {
-    const fetchCards = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/taskman/api/cards/list/${listId}`,
-          {
-            credentials: "include",
-          },
-        );
-
-        if (!res.ok) throw new Error("Failed to fetch cards");
-        const data = await res.json();
-
-        setCards(data);
-      } catch (err) {
-        console.log("Error fetching cards", err);
-      }
-    };
-
-    fetchCards();
-  }, []);
-
-  if (cards.length == 0) return null;
+export default function BoardCardsDisplay({ cards }) {
+  if (!cards || cards.length == 0) return null;
 
   return (
     <div className="flex flex-col space-y-2">
